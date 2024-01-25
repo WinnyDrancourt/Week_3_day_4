@@ -71,6 +71,7 @@ def menu
   input = gets.chomp.to_i
 end
 
+
 def perform
   data = init
   townhalls_url = make_townhall_url(data)
