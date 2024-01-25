@@ -1,8 +1,6 @@
 require 'nokogiri'
 require 'open-uri'
 
-#url = "https://annuaire-des-mairies.com/val-d-oise.html"
-
 def init
   url = "https://annuaire-des-mairies.com/val-d-oise.html"
   page = Nokogiri::HTML(URI.open(url))
