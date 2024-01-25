@@ -1,13 +1,13 @@
 require 'nokogiri'
 require 'open-uri'
 
-def noko
+def init
   url = "https://coinmarketcap.com/all/views/all/"
-  page = Nokogiri::HTML(URI.open(url).read)
+  page = Nokogiri::HTML(URI.open(url))
   data = page.xpath('.//tr[@class="cmc-table-row"]')
-  # return nil if (url.empty? || url.nil?)
   return data
 end
+
 def extract_names(data)
   names = []
   data.search('tr').each do |row|
@@ -16,6 +16,7 @@ def extract_names(data)
   end
   return names
 end
+
 def extract_prices(data)
   prices = []
   data.search('tr').each do |row|
@@ -24,13 +25,13 @@ def extract_prices(data)
   end
   return prices
 end
+
 def make_hash(names, prices)
   tmp_hash = Hash.new
-  for a in 0..names.size-1 do 
-    tmp_hash = [names.zip(prices)]
-  end
+    tmp_hash = names.zip(prices).to_h
   return tmp_hash
 end
+
 def menu
   system "clear"
   puts "Selectionnez les valeurs à afficher :"
@@ -39,13 +40,16 @@ def menu
   puts
   puts "[2] Le Hash Crypto/Valeurs"
   puts
+  puts "[3] Le Hash en Array Crypto/Valeurs"
+  puts
   puts "Toute autre valeur = Exit"
   puts
   print "> "
   input = gets.chomp.to_i
 end
+
 def perform
-  data = noko
+  data = init
   names = extract_names(data)
   prices = extract_prices(data)
   tmp_hash = make_hash(names, prices)
@@ -61,9 +65,14 @@ def perform
         perform
     when 2
       system "clear"
-      crypto_hash = []
-      crypto_hash = make_hash(names, prices)
-      puts crypto_hash 
+      puts tmp_hash
+      print "Enter to return at menu"
+        option = gets
+        perform
+    when 3
+      system "clear"
+      crypto_ = tmp_hash.to_a
+      puts crypto_
       print "Enter to return at menu"
         option = gets
         perform
